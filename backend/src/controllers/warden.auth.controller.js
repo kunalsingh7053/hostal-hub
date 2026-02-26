@@ -50,7 +50,8 @@ exports.registerWarden = async (req, res) => {
 
     res.status(201).json({
       msg: "Warden registered",
-      warden
+      warden,
+      token
     });
 
   } catch (err) {
@@ -105,7 +106,8 @@ exports.loginWarden = async (req, res) => {
 
     res.json({
       msg: "Login successful",
-      warden
+      warden,
+      token
     });
 
   } catch (err) {

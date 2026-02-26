@@ -1,11 +1,9 @@
-import React from 'react'
+import AppRoutes from './routes/AppRoutes'
 
-const App = () => {
-  return (
-    <div>
-      <h1 className='text-3xl font-bold text-center text-blue-600'>Hostel Hub</h1>
-    </div>
-  )
-}
+const App = () => (
+  <div className="min-h-screen bg-gray-50 text-gray-900">
+    <AppRoutes />
+  </div>
+)
 
 export default App

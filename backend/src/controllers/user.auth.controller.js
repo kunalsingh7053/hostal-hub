@@ -56,7 +56,8 @@ exports.registerStudent = async (req, res) => {
 
     res.status(201).json({
       msg: "Student registered",
-      student
+      student,
+      token
     });
 
   } catch (err) {
@@ -105,7 +106,8 @@ exports.loginStudent = async (req, res) => {
 
     res.json({
       msg: "Login successful",
-      student
+      student,
+      token
     });
 
   } catch (err) {
