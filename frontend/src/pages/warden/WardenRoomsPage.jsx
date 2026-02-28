@@ -11,7 +11,7 @@ const WardenRoomsPage = () => {
     const fetchRooms = async () => {
       setLoading(true)
       try {
-        const { data } = await api.get('/room')
+        const { data } = await api.get('/rooms')
         setRooms(Array.isArray(data) ? data : data?.rooms || [])
       } finally {
         setLoading(false)

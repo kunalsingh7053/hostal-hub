@@ -8,24 +8,18 @@ const wardenSchema = new mongoose.Schema(
     phone: { type: String, required: true },
     office: { type: String, default: "Hostel Office" },
     avatar: { type: String, default: null },
+    approvalStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending"
+    },
     access: {
       type: String,
       enum: ["allowed", "blocked"],
-      default: "allowed"
+      default: "blocked"
     }
   },
   { timestamps: true }
 );
-
-/**
- * Only one warden allowed
- */
-wardenSchema.pre("save", async function () {
-  const existing = await mongoose.models.Warden.findOne();
-
-  if (existing && existing._id.toString() !== this._id.toString()) {
-    throw new Error("Only one warden allowed");
-  }
-});
 
 module.exports = mongoose.model("Warden", wardenSchema);

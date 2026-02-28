@@ -1,5 +1,38 @@
 const StudentAttendance = require("../models/studentAttendance.model");
 
+// 0️⃣ Mark attendance for a student
+exports.markAttendance = async (req, res) => {
+  try {
+    const { studentId, status, date } = req.body || {};
+
+    if (!studentId) {
+      return res.status(400).json({ msg: "studentId is required" });
+    }
+
+    const allowed = ["Present", "Absent"];
+    if (!allowed.includes(status)) {
+      return res.status(400).json({ msg: "Invalid status" });
+    }
+
+    const targetDate = date ? new Date(date) : new Date();
+    targetDate.setHours(0, 0, 0, 0);
+
+    const record = await StudentAttendance.findOneAndUpdate(
+      { student: studentId, date: targetDate },
+      {
+        student: studentId,
+        date: targetDate,
+        status,
+      },
+      { new: true, upsert: true }
+    ).populate("student", "name room enrollmentNo");
+
+    res.json({ msg: "Attendance saved", attendance: record });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
 // 1️⃣ All students attendance by date
 exports.getAttendanceByDate = async (req, res) => {
   try {

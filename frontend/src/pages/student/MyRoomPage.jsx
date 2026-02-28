@@ -13,10 +13,21 @@ const MyRoomPage = () => {
     const fetchRoom = async () => {
       setLoading(true)
       try {
-        const { data } = await api.get('/room')
+        const { data } = await api.get('/rooms')
         const rooms = Array.isArray(data) ? data : data?.rooms || []
-        const assigned = rooms.find((item) => item.students?.some((student) => student._id === user?._id))
-        setRoom(assigned || { number: user?.roomNumber || 'Not assigned yet', capacity: '-', occupied: '-' })
+        const assigned = rooms.find((item) =>
+          item?.occupants?.some((occupant) => (occupant?._id || occupant) === user?._id),
+        )
+
+        if (assigned) {
+          setRoom({ ...assigned, occupied: assigned?.occupants?.length || assigned?.students?.length || 0 })
+        } else {
+          setRoom({
+            roomNumber: user?.room?.roomNumber || user?.roomNumber || 'Not assigned yet',
+            capacity: '-',
+            occupied: '-',
+          })
+        }
       } finally {
         setLoading(false)
       }

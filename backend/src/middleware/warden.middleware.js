@@ -12,6 +12,12 @@ const wardenOnly = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.role = decoded.role;
+    req.userId = decoded.id;
+
+    if (decoded.role === "admin") {
+      return next();
+    }
 
     if (decoded.role !== "warden") {
       return res.status(403).json({
@@ -24,6 +30,18 @@ const wardenOnly = async (req, res, next) => {
     if (!warden) {
       return res.status(403).json({
         msg: "Warden not found",
+      });
+    }
+
+    if (warden.approvalStatus && warden.approvalStatus !== "approved") {
+      return res.status(403).json({
+        msg: "Admin approval pending",
+      });
+    }
+
+    if (warden.access !== "allowed") {
+      return res.status(403).json({
+        msg: "Warden access blocked",
       });
     }
 

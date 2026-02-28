@@ -3,7 +3,7 @@ import Input from '../ui/Input'
 import Button from '../ui/Button'
 
 const ComplaintForm = ({ onSubmit, loading }) => {
-  const [form, setForm] = useState({ title: '', message: '', priority: 'medium' })
+  const [form, setForm] = useState({ title: '', description: '', priority: 'medium', category: 'other' })
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -12,7 +12,7 @@ const ComplaintForm = ({ onSubmit, loading }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    onSubmit?.(form, () => setForm({ title: '', message: '', priority: 'medium' }))
+    onSubmit?.(form, () => setForm({ title: '', description: '', priority: 'medium', category: 'other' }))
   }
 
   return (
@@ -21,13 +21,28 @@ const ComplaintForm = ({ onSubmit, loading }) => {
       <label className="flex flex-col gap-1 text-sm text-gray-700">
         <span className="font-medium">Message</span>
         <textarea
-          name="message"
-          value={form.message}
+          name="description"
+          value={form.description}
           onChange={handleChange}
           rows={4}
           className="rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
           required
         />
+      </label>
+      <label className="flex flex-col gap-1 text-sm text-gray-700">
+        <span className="font-medium">Category</span>
+        <select
+          name="category"
+          value={form.category}
+          onChange={handleChange}
+          className="rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+        >
+          <option value="electricity">Electricity</option>
+          <option value="water">Water</option>
+          <option value="cleaning">Cleaning</option>
+          <option value="maintenance">Maintenance</option>
+          <option value="other">Other</option>
+        </select>
       </label>
       <label className="flex flex-col gap-1 text-sm text-gray-700">
         <span className="font-medium">Priority</span>

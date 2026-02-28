@@ -26,8 +26,10 @@ const complaintSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["pending", "in_progress", "resolved"],
-      default: "pending"
+      enum: ["pending", "in-progress", "in_progress", "resolved"],
+      default: "pending",
+      set: (value) => (value === "in_progress" ? "in-progress" : value),
+      get: (value) => (value === "in_progress" ? "in-progress" : value)
     },
 
     room: {
@@ -35,7 +37,11 @@ const complaintSchema = new mongoose.Schema(
       default: null
     }
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: { getters: true },
+    toObject: { getters: true }
+  }
 );
 
 module.exports = mongoose.model("Complaint", complaintSchema);

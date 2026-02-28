@@ -69,6 +69,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["active", "inactive", "left"],
       default: "active"
+    },
+
+    approvalStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending"
     }
   },
   { timestamps: true }

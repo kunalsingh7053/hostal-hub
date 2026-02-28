@@ -23,6 +23,13 @@ exports.studentAuth = async (req, res, next) => {
       });
     }
 
+    if (student.approvalStatus && student.approvalStatus !== "approved") {
+      return res.status(403).json({
+        success: false,
+        msg: "Admin approval pending",
+      });
+    }
+
     req.student = student;
     next();
   } catch (err) {

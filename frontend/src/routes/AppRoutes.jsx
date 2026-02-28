@@ -2,7 +2,6 @@ import { Routes, Route } from 'react-router-dom'
 import Landing from '../pages/Landing'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
-import WardenRegister from '../pages/warden/WardenRegister'
 import Developers from '../pages/Developers'
 import DashboardLayout from '../layouts/DashboardLayout'
 import ProtectedRoute from './ProtectedRoute'
@@ -14,11 +13,13 @@ import WardensPage from '../pages/admin/WardensPage'
 import ComplaintsPage from '../pages/admin/ComplaintsPage'
 import NoticesPage from '../pages/admin/NoticesPage'
 import AdminMenuPage from '../pages/admin/MenuPage'
+import ApprovalsPage from '../pages/admin/ApprovalsPage'
 import WardenDashboard from '../pages/warden/WardenDashboard'
 import MarkAttendancePage from '../pages/warden/MarkAttendancePage'
 import WardenComplaintsPage from '../pages/warden/WardenComplaintsPage'
 import WardenNoticesPage from '../pages/warden/WardenNoticesPage'
 import WardenRoomsPage from '../pages/warden/WardenRoomsPage'
+import MenuPage from '../pages/admin/MenuPage'
 import StudentDashboard from '../pages/student/StudentDashboard'
 import MyAttendancePage from '../pages/student/MyAttendancePage'
 import MyComplaintsPage from '../pages/student/MyComplaintsPage'
@@ -31,13 +32,13 @@ const AppRoutes = () => (
     <Route index element={<Landing />} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
-    <Route path="/warden/register" element={<WardenRegister />} />
     <Route path="/developers" element={<Developers />} />
 
     <Route element={<ProtectedRoute />}>
       <Route element={<RoleRoute roles={['admin']} />}>
         <Route element={<DashboardLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/approvals" element={<ApprovalsPage />} />
           <Route path="/admin/rooms" element={<RoomsPage />} />
           <Route path="/admin/students" element={<StudentsPage />} />
           <Route path="/admin/wardens" element={<WardensPage />} />
@@ -54,6 +55,7 @@ const AppRoutes = () => (
           <Route path="/warden/complaints" element={<WardenComplaintsPage />} />
           <Route path="/warden/notices" element={<WardenNoticesPage />} />
           <Route path="/warden/rooms" element={<WardenRoomsPage />} />
+          <Route path="/warden/menu" element={<MenuPage />} />
         </Route>
       </Route>
 

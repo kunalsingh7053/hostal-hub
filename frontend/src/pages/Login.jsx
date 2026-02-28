@@ -54,6 +54,9 @@ const Login = () => {
             <Button type="submit" className="w-full" disabled={authLoading}>
               {authLoading ? 'Signing in...' : 'Login'}
             </Button>
+            <p className="text-center text-xs text-amber-600">
+              Access activates only after the admin desk approves your registration.
+            </p>
           </form>
         </Card>
         <p className="text-center text-sm text-gray-600">

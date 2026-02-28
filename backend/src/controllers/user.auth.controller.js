@@ -36,28 +36,16 @@ exports.registerStudent = async (req, res) => {
       phone,
       enrollmentNo,
       course,
-      year
+      year,
+      approvalStatus: "pending"
     });
 
-    // create token
-    const token = jwt.sign(
-      { id: student._id, role: "student" },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
-
-    // ✅ set cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false, // true in production https
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    });
+    const sanitized = student.toObject();
+    delete sanitized.password;
 
     res.status(201).json({
-      msg: "Student registered",
-      student,
-      token
+      msg: "Registration received. Await admin approval before logging in.",
+      student: sanitized
     });
 
   } catch (err) {
@@ -86,6 +74,18 @@ exports.loginStudent = async (req, res) => {
     if (!match) {
       return res.status(400).json({
         msg: "Wrong password"
+      });
+    }
+
+    if (student.approvalStatus && student.approvalStatus !== "approved") {
+      return res.status(403).json({
+        msg: "Admin approval pending"
+      });
+    }
+
+    if (student.status === "inactive") {
+      return res.status(403).json({
+        msg: "Your account is blocked by admin"
       });
     }
 

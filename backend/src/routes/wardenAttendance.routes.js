@@ -4,10 +4,14 @@ const router = express.Router();
 const wardenOnly = require("../middleware/warden.middleware");
 
 const {
+  markAttendance,
   getAttendanceByDate,
   getStudentAttendance,
   getStudentMonthlyAttendance,
 } = require("../controllers/wardenAttendance.controller");
+
+// mark attendance
+router.post("/", wardenOnly, markAttendance);
 
 // all students by date
 router.get("/date/:date", wardenOnly, getAttendanceByDate);

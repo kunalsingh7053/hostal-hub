@@ -10,7 +10,7 @@ import { useToast } from '../../components/ui/ToastProvider'
 const MenuPage = () => {
   const [menu, setMenu] = useState([])
   const [loading, setLoading] = useState(true)
-  const [form, setForm] = useState({ day: 'Monday', breakfast: '', lunch: '', snacks: '', dinner: '' })
+  const [form, setForm] = useState({ day: 'monday', breakfast: '', lunch: '', snacks: '', dinner: '' })
   const { showToast } = useToast()
 
   const fetchMenu = async () => {
@@ -35,12 +35,46 @@ const MenuPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      await api.post('/menu', form)
+      await api.post('/menu', {
+        ...form,
+        day: form.day.toLowerCase(),
+      })
       showToast({ title: 'Menu updated' })
       setForm((prev) => ({ day: prev.day, breakfast: '', lunch: '', snacks: '', dinner: '' }))
       fetchMenu()
     } catch (error) {
       showToast({ title: 'Failed to update', description: error.message, tone: 'error' })
+    }
+  }
+
+  const deleteDay = async (entry) => {
+    const id = entry._id
+    const day = entry.day
+    const confirmDelete = window.confirm(`Delete menu for ${day}?`)
+    if (!confirmDelete) return
+
+    try {
+      if (day) {
+        await api.delete(`/menu/day/${day}`)
+      } else if (id) {
+        await api.delete(`/menu/${id}`)
+      }
+      showToast({ title: 'Menu deleted' })
+      fetchMenu()
+    } catch (error) {
+      showToast({ title: 'Failed to delete', description: error.message, tone: 'error' })
+    }
+  }
+
+  const clearAll = async () => {
+    const confirmDelete = window.confirm('Clear the entire weekly menu?')
+    if (!confirmDelete) return
+    try {
+      await api.delete('/menu')
+      showToast({ title: 'All menu cleared' })
+      fetchMenu()
+    } catch (error) {
+      showToast({ title: 'Failed to clear', description: error.message, tone: 'error' })
     }
   }
 
@@ -56,8 +90,10 @@ const MenuPage = () => {
               onChange={handleChange}
               className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
             >
-              {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
-                <option key={day}>{day}</option>
+              {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => (
+                <option key={day} value={day} className="capitalize">
+                  {day}
+                </option>
               ))}
             </select>
           </label>
@@ -70,7 +106,13 @@ const MenuPage = () => {
           </Button>
         </form>
       </Card>
-      {loading ? <Loader /> : <MenuTable menu={menu} />}
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-lg font-semibold text-gray-800">Weekly menu</h2>
+        <Button variant="destructive" size="sm" onClick={clearAll}>
+          Clear all
+        </Button>
+      </div>
+      {loading ? <Loader /> : <MenuTable menu={menu} onDelete={deleteDay} />}
     </div>
   )
 }

@@ -2,9 +2,10 @@ import { NavLink } from 'react-router-dom'
 import clsx from 'clsx'
 import { useAuth } from '../context/AuthContext'
 
-const navConfig = {
+export const navConfig = {
   admin: [
     { label: 'Dashboard', to: '/admin/dashboard' },
+    { label: 'Approvals', to: '/admin/approvals' },
     { label: 'Rooms', to: '/admin/rooms' },
     { label: 'Students', to: '/admin/students' },
     { label: 'Wardens', to: '/admin/wardens' },
@@ -18,6 +19,7 @@ const navConfig = {
     { label: 'Complaints', to: '/warden/complaints' },
     { label: 'Notices', to: '/warden/notices' },
     { label: 'Rooms', to: '/warden/rooms' },
+    { label: 'Menu', to: '/warden/menu' },
   ],
   student: [
     { label: 'Dashboard', to: '/student/dashboard' },

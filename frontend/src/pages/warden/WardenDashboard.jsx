@@ -14,13 +14,13 @@ const WardenDashboard = () => {
         const today = new Date().toISOString().split('T')[0]
         const [attendance, complaints, rooms] = await Promise.all([
           api.get(`/warden/attendance/date/${today}`),
-          api.get('/complaint'),
-          api.get('/room'),
+          api.get('/complaints'),
+          api.get('/rooms'),
         ])
         setData({
           attendanceToday: attendance.data?.length || attendance.data?.count || 0,
           complaints: (Array.isArray(complaints.data) ? complaints.data : complaints.data?.complaints)?.length || 0,
-          rooms: rooms.data?.length || 0,
+          rooms: (Array.isArray(rooms.data) ? rooms.data : rooms.data?.rooms)?.length || 0,
         })
       } finally {
         setLoading(false)

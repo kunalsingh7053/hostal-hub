@@ -11,7 +11,7 @@ const StudentNoticesPage = () => {
     const fetchNotices = async () => {
       setLoading(true)
       try {
-        const { data } = await api.get('/notice')
+        const { data } = await api.get('/notices')
         setNotices(Array.isArray(data) ? data : data?.notices || [])
       } finally {
         setLoading(false)

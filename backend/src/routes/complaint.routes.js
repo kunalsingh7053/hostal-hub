@@ -7,7 +7,7 @@ router.post("/", auth, ctrl.createComplaint);
 router.get("/my", auth, ctrl.getMyComplaints);
 
 router.get("/", auth, wardenOnly, ctrl.getAllComplaints);
-router.patch("/:id/status", auth, wardenOnly, ctrl.updateStatus);
-router.delete("/:id", auth, wardenOnly, ctrl.deleteComplaint);
+router.patch("/:id/status", auth, ctrl.updateStatus);
+router.delete("/:id", auth, ctrl.deleteComplaint);
 
 module.exports = router;
