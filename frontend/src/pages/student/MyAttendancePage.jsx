@@ -33,6 +33,7 @@ const MyAttendancePage = () => {
 
   return (
     <div className="space-y-4">
+      <p>-</p>
       <h1 className="text-2xl font-bold text-gray-900">My Attendance</h1>
       {!loading && (
         <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
