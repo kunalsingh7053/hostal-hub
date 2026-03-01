@@ -2,11 +2,11 @@
 
 ```
 ██╗  ██╗ ██████╗ ███████╗████████╗███████╗██╗     ██╗  ██╗██╗   ██╗██████╗ 
-██║  ██║██╔═══██╗██╔════╝╚══██╔══╝██╔════╝██║     ██║  ██║██║   ██║██╔══██╗
-███████║██║   ██║███████╗   ██║   █████╗  ██║     ███████║██║   ██║██████╔╝
-██╔══██║██║   ██║╚════██║   ██║   ██╔══╝  ██║     ██╔══██║██║   ██║██╔══██╗
-██║  ██║╚██████╔╝███████║   ██║   ███████╗███████╗██║  ██║╚██████╔╝██║  ██║
-╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝   ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
+██║  ██║██╔═══██╗██╔════╝╚══██╔══╝██╔════╝██║     ██║  ██║██║   ██║██╔══██
+███████║██║   ██║███████╗   ██║   █████╗  ██║     ███████║██║   ██║██████
+██╔══██║██║   ██║╚════██║   ██║   ██╔══╝  ██║     ██╔══██║██║   ██║██╔══██
+██║  ██║╚██████╔╝███████║   ██║   ███████╗███████╗██║  ██║╚██████╔╝██████║
+╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝   ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝ 
 ```
 
 Full-stack hostel management built for a college student’s final-year presentation—my second client website. Polished UX, clear role flows, and easy-to-run demo paths.
@@ -75,15 +75,57 @@ npm run dev
 ```
 Frontend: Vite dev server (5173). Backend: 3000.
 
-## API quick tour
+## API map (role-aware)
+**Auth & registration**
+- POST `/api/student/auth/register` – student signup
 - POST `/api/student/auth/login` – student login
+- POST `/api/warden/auth/register` – warden signup
 - POST `/api/warden/auth/login` – warden login
+- POST `/api/admin/register` – provision first admin
 - POST `/api/admin/login` – admin login
-- GET `/api/students/me` – student profile (read-only)
-- GET `/api/warden/me` – warden profile (read-only)
-- GET `/api/admin/me` – admin profile (read-only)
+
+**Profiles (read-only in UI)**
+- GET `/api/students/me` – student profile
+- PUT `/api/students/me` – update student profile
+- GET `/api/warden/me` – warden profile
+- PUT `/api/warden/me` – update warden profile
+- GET `/api/admin/me` – admin profile
+- PUT `/api/admin/me` – update admin profile
+
+**Rooms** (warden/admin as configured)
+- POST `/api/rooms` – create room
 - GET `/api/rooms` – list rooms
-- GET/POST `/api/complaints` – complaints flow
+- PATCH `/api/rooms/:id` – update room
+- DELETE `/api/rooms/:id` – delete room
+- POST `/api/rooms/allocate` – assign student to room
+- POST `/api/rooms/remove` – remove student from room
+
+**Complaints**
+- POST `/api/complaints` – create complaint (student)
+- GET `/api/complaints/my` – my complaints
+- GET `/api/complaints` – all complaints (warden/admin)
+- PATCH `/api/complaints/:id/status` – update status
+- DELETE `/api/complaints/:id` – delete
+
+**Notices & Menu** (warden/admin)
+- POST `/api/notices` • GET `/api/notices` • PATCH `/api/notices/:id` • DELETE `/api/notices/:id`
+- POST `/api/menu` • GET `/api/menu` • DELETE `/api/menu` • DELETE `/api/menu/day/:day` • DELETE `/api/menu/:id`
+
+**Attendance**
+- POST `/api/student/attendance/mark` – student self mark
+- GET `/api/student/attendance/my` – my attendance
+- GET `/api/student/attendance/month/:year/:month` – monthly
+- POST `/api/warden/attendance` – warden marks attendance
+- GET `/api/warden/attendance/date/:date` – attendance by date
+- GET `/api/warden/attendance/student/:studentId` – history
+- GET `/api/warden/attendance/student/:studentId/month/:year/:month` – monthly history
+
+**Admin operations**
+- GET `/api/admin/registrations/pending` – pending students/wardens
+- PATCH `/api/admin/registrations/:type/:id` – approve/reject
+- GET `/api/admin/complaints` – all complaints
+- PATCH `/api/admin/complaints/:id/status` – update complaint status
+- PATCH `/api/admin/students/:id/status` – update student status
 
 ## Demo script (presentation-ready)
 1) Admin: approve pending users/wardens, post a notice, update menu
