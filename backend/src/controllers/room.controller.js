@@ -37,26 +37,59 @@ exports.getRooms = async (req, res) => {
 exports.allocateRoom = async (req, res) => {
   const { roomId, studentId } = req.body;
 
-  const room = await Room.findById(roomId);
+  if (!roomId || !studentId) {
+    return res.status(400).json({ msg: "roomId and studentId are required" });
+  }
 
-  if (room.occupants.length >= room.capacity) {
+  const [room, student] = await Promise.all([
+    Room.findById(roomId),
+    User.findById(studentId),
+  ]);
+
+  if (!room) {
+    return res.status(404).json({ msg: "Room not found" });
+  }
+
+  if (!student) {
+    return res.status(404).json({ msg: "Student not found" });
+  }
+
+  // If student already in this room, nothing to do
+  if (room.occupants.some((id) => id.toString() === studentId)) {
+    return res.json({ msg: "Room allocated", room });
+  }
+
+  // Remove student from any previous room
+  if (student.room && student.room.toString() !== roomId) {
+    await Room.updateMany({ occupants: studentId }, { $pull: { occupants: studentId } });
+  }
+
+  const currentOccupancy = room.occupants.length;
+  if (currentOccupancy >= room.capacity) {
     return res.status(400).json({ msg: "Room full" });
   }
 
   room.occupants.push(studentId);
   await room.save();
 
-  await User.findByIdAndUpdate(studentId, { room: roomId });
+  student.room = roomId;
+  await student.save();
 
-  res.json({ msg: "Room allocated" });
+  res.json({ msg: "Room allocated", room });
 };
 
 exports.removeStudentFromRoom = async (req, res) => {
   const { roomId, studentId } = req.body;
 
-  await Room.findByIdAndUpdate(roomId, {
+  if (!roomId || !studentId) {
+    return res.status(400).json({ msg: "roomId and studentId are required" });
+  }
+
+  await Room.updateMany({ _id: roomId }, {
     $pull: { occupants: studentId }
   });
+
+  await Room.updateMany({ occupants: studentId }, { $pull: { occupants: studentId } });
 
   await User.findByIdAndUpdate(studentId, { room: null });
 

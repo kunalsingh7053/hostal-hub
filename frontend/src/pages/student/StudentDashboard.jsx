@@ -13,15 +13,22 @@ const StudentDashboard = () => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const [attendanceResponse, complaintsResponse] = await Promise.all([
-          api.get('/student/attendance/me'),
+        const [attendanceResponse, complaintsResponse, profileResponse] = await Promise.all([
+          api.get('/student/attendance/my'),
           api.get('/complaints/my'),
+          api.get('/students/me'),
         ])
 
         setData({
           attendance: attendanceResponse.data?.length || attendanceResponse.data?.count || 0,
           complaints: Array.isArray(complaintsResponse.data) ? complaintsResponse.data.length : 0,
-          room: user?.room?.roomNumber || user?.room?.number || user?.roomNumber || 'Unassigned',
+          room:
+            profileResponse.data?.room?.roomNumber ||
+            profileResponse.data?.room?.number ||
+            user?.room?.roomNumber ||
+            user?.room?.number ||
+            user?.roomNumber ||
+            'Unassigned',
         })
       } finally {
         setLoading(false)

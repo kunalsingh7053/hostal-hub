@@ -26,6 +26,7 @@ import MyComplaintsPage from '../pages/student/MyComplaintsPage'
 import MyRoomPage from '../pages/student/MyRoomPage'
 import StudentMenuPage from '../pages/student/StudentMenuPage'
 import StudentNoticesPage from '../pages/student/StudentNoticesPage'
+import ProfilePage from '../pages/ProfilePage'
 
 const AppRoutes = () => (
   <Routes>
@@ -45,6 +46,7 @@ const AppRoutes = () => (
           <Route path="/admin/complaints" element={<ComplaintsPage />} />
           <Route path="/admin/notices" element={<NoticesPage />} />
           <Route path="/admin/menu" element={<AdminMenuPage />} />
+          <Route path="/admin/profile" element={<ProfilePage />} />
         </Route>
       </Route>
 
@@ -55,7 +57,9 @@ const AppRoutes = () => (
           <Route path="/warden/complaints" element={<WardenComplaintsPage />} />
           <Route path="/warden/notices" element={<WardenNoticesPage />} />
           <Route path="/warden/rooms" element={<WardenRoomsPage />} />
+          <Route path="/warden/students" element={<StudentsPage mode="warden" />} />
           <Route path="/warden/menu" element={<MenuPage />} />
+          <Route path="/warden/profile" element={<ProfilePage />} />
         </Route>
       </Route>
 
@@ -67,6 +71,7 @@ const AppRoutes = () => (
           <Route path="/student/room" element={<MyRoomPage />} />
           <Route path="/student/menu" element={<StudentMenuPage />} />
           <Route path="/student/notices" element={<StudentNoticesPage />} />
+          <Route path="/student/profile" element={<ProfilePage />} />
         </Route>
       </Route>
     </Route>

@@ -13,19 +13,33 @@ const MyRoomPage = () => {
     const fetchRoom = async () => {
       setLoading(true)
       try {
-        const { data } = await api.get('/rooms')
-        const rooms = Array.isArray(data) ? data : data?.rooms || []
-        const assigned = rooms.find((item) =>
-          item?.occupants?.some((occupant) => (occupant?._id || occupant) === user?._id),
-        )
+        const [profileRes, roomsRes] = await Promise.all([
+          api.get('/students/me'),
+          api.get('/rooms'),
+        ])
+
+        const profile = profileRes.data || {}
+        const rooms = Array.isArray(roomsRes.data) ? roomsRes.data : roomsRes.data?.rooms || []
+        const roomId = profile?.room?._id || profile?.room
+
+        // Prefer the room directly from profile if present
+        let assigned = rooms.find((item) => (item?._id || item?.id)?.toString() === roomId?.toString())
+
+        // Fallback: match by occupants
+        if (!assigned && profile?._id) {
+          assigned = rooms.find((item) =>
+            item?.occupants?.some((occupant) => (occupant?._id || occupant)?.toString() === profile._id?.toString()),
+          )
+        }
 
         if (assigned) {
           setRoom({ ...assigned, occupied: assigned?.occupants?.length || assigned?.students?.length || 0 })
         } else {
           setRoom({
-            roomNumber: user?.room?.roomNumber || user?.roomNumber || 'Not assigned yet',
+            roomNumber: 'Not assigned yet',
             capacity: '-',
             occupied: '-',
+            block: null,
           })
         }
       } finally {
@@ -34,7 +48,7 @@ const MyRoomPage = () => {
     }
 
     fetchRoom()
-  }, [user])
+  }, [])
 
   return (
     <div className="space-y-4">

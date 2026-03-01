@@ -9,5 +9,7 @@ router.patch("/registrations/:type/:id", auth, adminOnly, ctrl.reviewRegistratio
 router.get("/complaints", auth, adminOnly, complaintCtrl.getAllComplaints);
 router.patch("/complaints/:id/status", auth, adminOnly, complaintCtrl.updateStatus);
 router.patch("/students/:id/status", auth, adminOnly, ctrl.updateStudentStatus);
+router.get("/me", auth, adminOnly, ctrl.getAdminProfile);
+router.put("/me", auth, adminOnly, ctrl.updateAdminProfile);
 
 module.exports = router;

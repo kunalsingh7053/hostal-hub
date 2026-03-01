@@ -158,6 +158,12 @@ export const AuthProvider = ({ children }) => {
     persist(null, null, null)
   }, [persist])
 
+  const updateStoredUser = useCallback((nextUser) => {
+    if (!token || !role) return
+    setUser(nextUser)
+    persist(token, nextUser, role)
+  }, [persist, token, role])
+
   const value = useMemo(() => ({
     token,
     user,
@@ -169,7 +175,8 @@ export const AuthProvider = ({ children }) => {
     logout,
     registerStudent,
     registerWarden,
-  }), [token, user, role, authLoading, initializing, login, logout, registerStudent, registerWarden])
+    updateStoredUser,
+  }), [token, user, role, authLoading, initializing, login, logout, registerStudent, registerWarden, updateStoredUser])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

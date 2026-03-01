@@ -12,6 +12,7 @@ export const navConfig = {
     { label: 'Complaints', to: '/admin/complaints' },
     { label: 'Notices', to: '/admin/notices' },
     { label: 'Menu', to: '/admin/menu' },
+    { label: 'Profile', to: '/admin/profile' },
   ],
   warden: [
     { label: 'Dashboard', to: '/warden/dashboard' },
@@ -19,7 +20,9 @@ export const navConfig = {
     { label: 'Complaints', to: '/warden/complaints' },
     { label: 'Notices', to: '/warden/notices' },
     { label: 'Rooms', to: '/warden/rooms' },
+    { label: 'Students', to: '/warden/students' },
     { label: 'Menu', to: '/warden/menu' },
+    { label: 'Profile', to: '/warden/profile' },
   ],
   student: [
     { label: 'Dashboard', to: '/student/dashboard' },
@@ -28,6 +31,7 @@ export const navConfig = {
     { label: 'Room', to: '/student/room' },
     { label: 'Menu', to: '/student/menu' },
     { label: 'Notices', to: '/student/notices' },
+    { label: 'Profile', to: '/student/profile' },
   ],
 }
 

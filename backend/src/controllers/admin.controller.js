@@ -1,5 +1,7 @@
+const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
 const Warden = require("../models/warden.model");
+const Admin = require("../models/admin.model");
 
 const sanitize = (doc) => {
   if (!doc) return doc;
@@ -106,6 +108,54 @@ exports.updateStudentStatus = async (req, res) => {
     }
 
     res.json({ msg: "Student status updated", student: sanitize(student) });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+exports.getAdminProfile = async (req, res) => {
+  try {
+    const admin = await Admin.findById(req.userId).select("-password");
+    if (!admin) return res.status(404).json({ msg: "Admin not found" });
+    res.json(sanitize(admin));
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+exports.updateAdminProfile = async (req, res) => {
+  try {
+    const { name, email, password } = req.body || {};
+    const updates = {};
+
+    if (name) updates.name = name.trim();
+    if (email) updates.email = email.toLowerCase().trim();
+
+    if (updates.email) {
+      const duplicate = await Admin.findOne({ email: updates.email, _id: { $ne: req.userId } });
+      if (duplicate) {
+        return res.status(400).json({ msg: "Email already in use" });
+      }
+    }
+
+    if (password) {
+      if (password.length < 6) {
+        return res.status(400).json({ msg: "Password must be at least 6 characters" });
+      }
+      updates.password = await bcrypt.hash(password, 10);
+    }
+
+    const admin = await Admin.findByIdAndUpdate(
+      req.userId,
+      { $set: updates },
+      { new: true }
+    ).select("-password");
+
+    if (!admin) {
+      return res.status(404).json({ msg: "Admin not found" });
+    }
+
+    res.json({ msg: "Profile updated", admin: sanitize(admin) });
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }

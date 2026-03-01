@@ -7,24 +7,32 @@ import Loader from '../../components/ui/Loader'
 import Button from '../../components/ui/Button'
 import { useToast } from '../../components/ui/ToastProvider'
 
-const StudentsPage = () => {
+const StudentsPage = ({ mode = 'admin' }) => {
   const [students, setStudents] = useState([])
+  const [rooms, setRooms] = useState([])
   const [loading, setLoading] = useState(true)
   const [query, setQuery] = useState('')
+  const [selection, setSelection] = useState({})
   const { showToast } = useToast()
 
+  const canUpdateStatus = mode === 'admin'
+
   useEffect(() => {
-    const fetchStudents = async () => {
+    const fetchData = async () => {
       setLoading(true)
       try {
-        const { data } = await api.get('/students')
-        setStudents(Array.isArray(data) ? data : data?.students || [])
+        const [studentsRes, roomsRes] = await Promise.all([
+          api.get('/students'),
+          api.get('/rooms'),
+        ])
+        setStudents(Array.isArray(studentsRes.data) ? studentsRes.data : studentsRes.data?.students || [])
+        setRooms(Array.isArray(roomsRes.data) ? roomsRes.data : roomsRes.data?.rooms || [])
       } finally {
         setLoading(false)
       }
     }
 
-    fetchStudents()
+    fetchData()
   }, [])
 
   const updateStatus = async (student, status) => {
@@ -36,6 +44,36 @@ const StudentsPage = () => {
       setStudents(Array.isArray(data) ? data : data?.students || [])
     } catch (error) {
       showToast({ title: 'Unable to update', description: error.message, tone: 'error' })
+    }
+  }
+
+  const assignRoom = async (student) => {
+    const roomId = selection[student._id]
+    if (!roomId) {
+      showToast({ title: 'Select a room first', tone: 'error' })
+      return
+    }
+    try {
+      await api.post('/rooms/allocate', { roomId, studentId: student._id })
+      showToast({ title: 'Room assigned' })
+      const [studentsRes, roomsRes] = await Promise.all([api.get('/students'), api.get('/rooms')])
+      setStudents(Array.isArray(studentsRes.data) ? studentsRes.data : studentsRes.data?.students || [])
+      setRooms(Array.isArray(roomsRes.data) ? roomsRes.data : roomsRes.data?.rooms || [])
+    } catch (error) {
+      showToast({ title: 'Unable to assign', description: error.response?.data?.msg || error.message, tone: 'error' })
+    }
+  }
+
+  const removeRoom = async (student) => {
+    if (!student?.room?._id) return
+    try {
+      await api.post('/rooms/remove', { roomId: student.room._id, studentId: student._id })
+      showToast({ title: 'Room removed' })
+      const [studentsRes, roomsRes] = await Promise.all([api.get('/students'), api.get('/rooms')])
+      setStudents(Array.isArray(studentsRes.data) ? studentsRes.data : studentsRes.data?.students || [])
+      setRooms(Array.isArray(roomsRes.data) ? roomsRes.data : roomsRes.data?.rooms || [])
+    } catch (error) {
+      showToast({ title: 'Unable to remove', description: error.response?.data?.msg || error.message, tone: 'error' })
     }
   }
 
@@ -89,22 +127,64 @@ const StudentsPage = () => {
       ),
     },
     {
-      header: 'Actions',
-      accessor: 'actions',
-      cell: (row) => (
-        <div className="flex flex-wrap gap-2">
-          <Button size="sm" variant={row.status === 'active' ? 'secondary' : 'ghost'} onClick={() => updateStatus(row, 'active')}>
-            Activate
-          </Button>
-          <Button size="sm" variant={row.status === 'inactive' ? 'secondary' : 'ghost'} onClick={() => updateStatus(row, 'inactive')}>
-            Block
-          </Button>
-          <Button size="sm" variant={row.status === 'left' ? 'secondary' : 'ghost'} onClick={() => updateStatus(row, 'left')}>
-            Mark Left
-          </Button>
-        </div>
-      ),
+      header: 'Room',
+      accessor: 'room',
+      cell: (row) => {
+        const currentRoomId = row.room?._id || row.room?.id
+        return (
+          <div className="space-y-2">
+            <div className="inline-flex rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+              {row.room?.roomNumber || 'Unassigned'}
+            </div>
+            <select
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none"
+              value={selection[row._id] || ''}
+              onChange={(e) => setSelection((prev) => ({ ...prev, [row._id]: e.target.value }))}
+            >
+              <option value="">Select room</option>
+              {rooms.map((room) => {
+                const occupied = room.occupants?.length ?? 0
+                const full = occupied >= room.capacity && room._id !== currentRoomId
+                const label = room.roomNumber || room.number
+                return (
+                  <option key={room._id} value={room._id} disabled={full}>
+                    {label} ({occupied}/{room.capacity})
+                    {full ? ' - Full' : ''}
+                  </option>
+                )
+              })}
+            </select>
+            <div className="flex gap-2">
+              <Button size="sm" onClick={() => assignRoom(row)}>Assign</Button>
+              <Button size="sm" variant="ghost" disabled={!row.room?._id} onClick={() => removeRoom(row)}>
+                Remove
+              </Button>
+            </div>
+          </div>
+        )
+      },
     },
+    ...(canUpdateStatus
+      ? [
+          {
+            header: 'Actions',
+            accessor: 'actions',
+            cell: (row) => (
+              <div className="flex flex-wrap gap-2">
+                <Button size="sm" variant={row.status === 'active' ? 'secondary' : 'ghost'} onClick={() => updateStatus(row, 'active')}>
+                  Activate
+                </Button>
+                <Button size="sm" variant={row.status === 'inactive' ? 'secondary' : 'ghost'} onClick={() => updateStatus(row, 'inactive')}>
+                  Block
+                </Button>
+                <Button size="sm" variant={row.status === 'left' ? 'secondary' : 'ghost'} onClick={() => updateStatus(row, 'left')}>
+                  Mark Left
+                </Button>
+              </div>
+            ),
+          },
+        ]
+      : []),
   ]
 
   return (
