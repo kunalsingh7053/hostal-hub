@@ -5,7 +5,15 @@ const studentAttendanceRoutes = require("./routes/studentAttendance.routes");
 const wardenAttendanceRoutes = require("./routes/wardenAttendance.routes");
 
 const app = express();
-app.use(cors());
+
+// ✅ CORS for Netlify frontend
+app.use(
+  cors({
+    origin: "https://hoostelhub.netlify.app",
+    credentials: true
+  })
+);
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -22,4 +30,5 @@ app.use("/api/notices", require("./routes/notice.routes"));
 app.use("/api/menu", require("./routes/menu.routes"));
 app.use("/api/student/attendance", studentAttendanceRoutes);
 app.use("/api/warden/attendance", wardenAttendanceRoutes);
+
 module.exports = app;
