@@ -4,9 +4,11 @@ const baseStyles = 'inline-flex items-center justify-center rounded-md font-medi
 
 const variants = {
   primary: 'bg-primary text-white hover:bg-primary/90 focus-visible:outline-primary',
-  secondary: 'bg-white text-gray-900 ring-1 ring-inset ring-gray-200 hover:bg-gray-50 focus-visible:outline-gray-200',
+  secondary:
+    'bg-white text-gray-900 ring-1 ring-inset ring-gray-200 hover:bg-gray-50 focus-visible:outline-gray-200 dark:bg-slate-900 dark:text-slate-100 dark:ring-slate-700 dark:hover:bg-slate-800 dark:focus-visible:outline-slate-700',
   danger: 'bg-rose-600 text-white hover:bg-rose-500 focus-visible:outline-rose-600',
-  ghost: 'bg-transparent text-gray-700 hover:bg-gray-100 focus-visible:outline-gray-200',
+  ghost:
+    'bg-transparent text-gray-700 hover:bg-gray-100 focus-visible:outline-gray-200 dark:text-slate-100 dark:hover:bg-slate-800 dark:focus-visible:outline-slate-700',
 }
 
 const sizes = {

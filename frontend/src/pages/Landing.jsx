@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { getDashboardPath, roleFriendlyName } from '../utils/routes'
+import { useTheme } from '../context/ThemeContext'
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -45,8 +46,16 @@ const screenshots = [
 ]
 
 const developers = [
-  { name: 'Sejal Singh', enrollment: 'SC23CS301134', image: '/developers/sejal.jpg' },
-  { name: 'Shivani Gothi', enrollment: 'SC23CS301139', image: '/developers/shivani.jpg' },
+  {
+    name: 'Sejal Singh',
+    enrollment: 'SC23CS301134',
+    image: 'https://i.pinimg.com/1200x/78/1d/f9/781df9149c96a37ee4c3d0afb9c0f987.jpg',
+  },
+  {
+    name: 'Shivani Gothi',
+    enrollment: 'SC23CS301139',
+    image: 'https://i.pinimg.com/736x/9f/f5/a2/9ff5a212d50b204a9cfd54c80e68dd35.jpg',
+  },
 ]
 
 const animatedHighlights = [
@@ -64,33 +73,6 @@ const marqueeRows = [
   { direction: 'left', duration: 26, items: animatedHighlights.slice(0, highlightMidPoint) },
   { direction: 'right', duration: 30, items: animatedHighlights.slice(highlightMidPoint) },
 ]
-
-const useLandingTheme = () => {
-  const [theme, setTheme] = useState('light')
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const storedTheme = window.localStorage.getItem('hostelHubTheme')
-    if (storedTheme === 'dark' || storedTheme === 'light') {
-      setTheme(storedTheme)
-      return
-    }
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setTheme('dark')
-    }
-  }, [])
-
-  useEffect(() => {
-    if (typeof document === 'undefined' || typeof window === 'undefined') return
-    document.documentElement.setAttribute('data-theme', theme)
-    document.documentElement.classList.toggle('dark', theme === 'dark')
-    window.localStorage.setItem('hostelHubTheme', theme)
-  }, [theme])
-
-  const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
-
-  return { theme, toggleTheme }
-}
 
 const benefits = [
   { title: 'Centralized Compliance', description: 'Audit-ready logs for check-ins, notices, and escalations in a single trail.' },
@@ -332,7 +314,7 @@ const LandingNavbar = ({ theme, toggleTheme }) => {
 }
 
 const Landing = () => {
-  const { theme, toggleTheme } = useLandingTheme()
+  const { theme, toggleTheme } = useTheme()
   const isDark = theme === 'dark'
   const mutedText = isDark ? 'text-gray-300' : 'text-gray-600'
   const strongText = isDark ? 'text-white' : 'text-gray-900'

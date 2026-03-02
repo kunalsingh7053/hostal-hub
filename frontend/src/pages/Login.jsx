@@ -31,20 +31,20 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 text-gray-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
       <Navbar />
       <section className="mx-auto flex max-w-md flex-col gap-6 px-4 py-16">
         <Card title="Login" description="Access your personalized dashboard">
           <form className="space-y-4" onSubmit={handleSubmit}>
             <Input label="Institution Email" type="email" name="email" value={form.email} onChange={handleChange} required />
             <Input label="Password" type="password" name="password" value={form.password} onChange={handleChange} required />
-            <label className="flex flex-col gap-1 text-sm text-gray-700">
+            <label className="flex flex-col gap-1 text-sm text-gray-700 dark:text-slate-200">
               <span className="font-medium">Login as</span>
               <select
                 name="selectedRole"
                 value={form.selectedRole}
                 onChange={handleChange}
-                className="rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 transition focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
               >
                 <option value="student">Student</option>
                 <option value="warden">Warden</option>
@@ -59,7 +59,7 @@ const Login = () => {
             </p>
           </form>
         </Card>
-        <p className="text-center text-sm text-gray-600">
+        <p className="text-center text-sm text-gray-600 dark:text-slate-300">
           New student?{' '}
           <Link to="/register" className="font-semibold text-primary">
             Register your account
