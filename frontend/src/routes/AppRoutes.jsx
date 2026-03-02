@@ -2,7 +2,6 @@ import { Routes, Route } from 'react-router-dom'
 import Landing from '../pages/Landing'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
-import Developers from '../pages/Developers'
 import DashboardLayout from '../layouts/DashboardLayout'
 import ProtectedRoute from './ProtectedRoute'
 import RoleRoute from './RoleRoute'
@@ -33,7 +32,6 @@ const AppRoutes = () => (
     <Route index element={<Landing />} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
-    <Route path="/developers" element={<Developers />} />
 
     <Route element={<ProtectedRoute />}>
       <Route element={<RoleRoute roles={['admin']} />}>

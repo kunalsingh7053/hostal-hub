@@ -13,7 +13,6 @@ const Navbar = () => {
     ? []
     : [
         { label: 'Home', to: '/' },
-        { label: 'Developers', to: '/developers' },
       ]
 
   const userNav = navConfig[role] || []

@@ -9,7 +9,6 @@ const navLinks = [
   { label: 'Home', href: '#home' },
   { label: 'Features', href: '#features' },
   { label: 'Roles', href: '#roles' },
-  { label: 'Developers', href: '#developers' },
   { label: 'Benefits', href: '#benefits' },
   { label: 'Insights', href: '#insights' },
   { label: 'Stories', href: '#stories' },
@@ -43,19 +42,6 @@ const steps = [
 const screenshots = [
   { title: 'Insights Dashboard', description: 'Monitor key KPIs across occupancy, attendance, and complaints.', gradient: 'from-violet-500 to-sky-500' },
   { title: 'Attendance Pulse', description: 'See live attendance based on warden check-ins and student swipes.', gradient: 'from-emerald-500 to-lime-400' },
-]
-
-const developers = [
-  {
-    name: 'Sejal Singh',
-    enrollment: 'SC23CS301134',
-    image: 'https://i.pinimg.com/1200x/78/1d/f9/781df9149c96a37ee4c3d0afb9c0f987.jpg',
-  },
-  {
-    name: 'Shivani Gothi',
-    enrollment: 'SC23CS301139',
-    image: 'https://i.pinimg.com/736x/9f/f5/a2/9ff5a212d50b204a9cfd54c80e68dd35.jpg',
-  },
 ]
 
 const animatedHighlights = [
@@ -640,44 +626,6 @@ const Landing = () => {
           ))}
         </motion.div>
       </section>
-
-      <section id="developers" className="space-y-8 scroll-mt-32">
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} className="space-y-2 text-center">
-          <p className="text-xs uppercase tracking-[0.4em] text-primary">Developers</p>
-          <h2 className={`text-3xl font-bold ${strongText}`}>Meet the minds behind Hostel Hub</h2>
-        </motion.div>
-        <motion.div variants={staggerParent} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} className="grid gap-6 md:grid-cols-2">
-          {developers.map((dev) => (
-            <motion.article
-              key={dev.enrollment}
-              variants={fadeUp}
-              whileHover={{ scale: 1.02, rotate: 1 }}
-              className={`flex items-center gap-4 rounded-3xl p-6 shadow-sm ${cardSurface}`}
-            >
-              <motion.div className="h-20 w-20 overflow-hidden rounded-full border-4 border-white shadow" animate={{ y: [0, -6, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}>
-                <img
-                  src={dev.image}
-                  alt={dev.name}
-                  className="h-full w-full object-cover"
-                  onError={(event) => {
-                    event.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(dev.name)}`
-                  }}
-                />
-              </motion.div>
-              <div>
-                <h3 className={`text-lg font-semibold ${strongText}`}>{dev.name}</h3>
-                <p className={`text-sm ${mutedText}`}>{dev.enrollment}</p>
-              </div>
-            </motion.article>
-          ))}
-        </motion.div>
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} className="text-center">
-          <Link to="/developers" className="inline-flex items-center rounded-full border border-primary/20 px-6 py-3 text-sm font-semibold text-primary">
-            View Developers
-          </Link>
-        </motion.div>
-      </section>
-
       <section id="faq" className="space-y-8 scroll-mt-32">
         <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} className="space-y-2 text-center">
           <p className="text-xs uppercase tracking-[0.4em] text-primary">FAQ</p>
@@ -740,7 +688,7 @@ const Landing = () => {
           <p>© 2026 Hostel Hub. All rights reserved.</p>
         </div>
         <div className="flex flex-wrap justify-center gap-4">
-          {['Home', 'Features', 'Roles', 'Developers'].map((link) => (
+          {['Home', 'Features', 'Roles'].map((link) => (
             <a
               key={link}
               href={`/#${link.toLowerCase().replace(/\s+/g, '-')}`}
