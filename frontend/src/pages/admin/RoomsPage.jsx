@@ -93,7 +93,7 @@ const RoomsPage = () => {
           <Input label="Capacity" name="capacity" type="number" value={form.capacity} onChange={handleChange} required />
           <Input label="Block" name="block" value={form.block} onChange={handleChange} required />
           <Input label="Floor" name="floor" type="number" value={form.floor} onChange={handleChange} />
-          <div className="flex gap-3 sm:col-span-4">
+          <div className="flex flex-wrap gap-3 sm:col-span-4">
             <Button type="submit">{form.id ? 'Update Room' : 'Save Room'}</Button>
             {form.id && (
               <Button type="button" variant="secondary" onClick={() => setForm({ id: null, number: '', capacity: '', block: '', floor: '' })}>

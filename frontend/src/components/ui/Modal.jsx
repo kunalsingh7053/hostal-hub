@@ -5,7 +5,7 @@ const Modal = ({ open, title, description, children, onClose, actions }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-6">
-      <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
+      <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl max-h-[85vh] overflow-y-auto">
         {(title || description) && (
           <header className="mb-4 space-y-1">
             {title && <h3 className="text-xl font-semibold text-gray-900">{title}</h3>}

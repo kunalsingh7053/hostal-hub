@@ -48,13 +48,17 @@ const AdminDashboard = () => {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs uppercase tracking-[0.4em] text-gray-400">Overview</p>
-        <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+        <p className="text-xs uppercase tracking-[0.4em] text-gray-400 dark:text-slate-400">Overview</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">Admin Dashboard</h1>
       </div>
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-5">
         {cards.map((card) => (
-          <Card key={card.label} className="bg-gradient-to-br from-white to-gray-50" title={card.label}>
-            <p className="text-4xl font-bold text-gray-900">{card.value}</p>
+          <Card
+            key={card.label}
+            className="bg-gradient-to-br from-white to-gray-50 dark:from-slate-900 dark:to-slate-800"
+            title={card.label}
+          >
+            <p className="text-4xl font-bold text-gray-900 dark:text-slate-50">{card.value}</p>
           </Card>
         ))}
       </div>

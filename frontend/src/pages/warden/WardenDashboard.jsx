@@ -41,13 +41,13 @@ const WardenDashboard = () => {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs uppercase tracking-[0.4em] text-gray-400">Overview</p>
-        <h1 className="text-3xl font-bold text-gray-900">Warden Dashboard</h1>
+        <p className="text-xs uppercase tracking-[0.4em] text-gray-400 dark:text-slate-400">Overview</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">Warden Dashboard</h1>
       </div>
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {cards.map((card) => (
           <Card key={card.label} title={card.label}>
-            <p className="text-4xl font-bold text-gray-900">{card.value}</p>
+            <p className="text-4xl font-bold text-gray-900 dark:text-slate-50">{card.value}</p>
           </Card>
         ))}
       </div>

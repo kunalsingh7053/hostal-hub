@@ -49,13 +49,13 @@ const StudentDashboard = () => {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs uppercase tracking-[0.4em] text-gray-400">Welcome back</p>
-        <h1 className="text-3xl font-bold text-gray-900">Student Dashboard</h1>
+        <p className="text-xs uppercase tracking-[0.4em] text-gray-400 dark:text-slate-400">Welcome back</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">Student Dashboard</h1>
       </div>
       <div className="grid gap-5 sm:grid-cols-3">
         {cards.map((card) => (
           <Card key={card.label} title={card.label}>
-            <p className="text-4xl font-bold text-gray-900">{card.value}</p>
+            <p className="text-4xl font-bold text-gray-900 dark:text-slate-50">{card.value}</p>
           </Card>
         ))}
       </div>
