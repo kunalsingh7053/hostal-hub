@@ -6,12 +6,26 @@ const wardenAttendanceRoutes = require("./routes/wardenAttendance.routes");
 
 const app = express();
 
-// ✅ CORS for Netlify frontend
+// ✅ CORS for allowed frontends (Netlify, Vercel, Render backend)
+const allowedOrigins = [
+  "https://hoostelhub.netlify.app",
+  "https://hostal-hub.vercel.app",
+  "https://hostal-hub.onrender.com",
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
+
 app.use(
   cors({
-    origin: "https://hoostelhub.netlify.app",
-    origin: "https://hostal-hub.vercel.app",
-    credentials: true
+    origin: (origin, callback) => {
+      // Allow server-to-server or curl with no origin
+      if (!origin) return callback(null, true);
+      return allowedOrigins.includes(origin)
+        ? callback(null, true)
+        : callback(new Error(`CORS blocked for origin ${origin}`), false);
+    },
+    credentials: true,
+    optionsSuccessStatus: 200,
   })
 );
 
