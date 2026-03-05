@@ -148,7 +148,47 @@ const ApprovalsPage = () => {
             {statusChip('Up to date')}
           </div>
         ) : (
-          <Table columns={studentColumns} rows={pending.students} emptyLabel="No pending students" />
+          <>
+            <div className="hidden sm:block">
+              <Table columns={studentColumns} rows={pending.students} emptyLabel="No pending students" />
+            </div>
+            <div className="grid gap-3 sm:hidden">
+              {pending.students.map((row) => (
+                <div key={row._id} className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-base font-semibold text-gray-900 dark:text-slate-100">{row.name}</p>
+                      <p className="text-sm text-gray-600 dark:text-slate-300">{row.email}</p>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                        {row.enrollmentNo} • {row.course || 'Programme'} • Year {row.year || '—'}
+                      </p>
+                      <p className="mt-1 text-xs text-gray-500 dark:text-slate-400">Requested {new Date(row.createdAt).toLocaleString()}</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Button
+                      size="sm"
+                      variant="primary"
+                      className="flex-1 min-w-[120px]"
+                      disabled={actioning === `student-${row._id}`}
+                      onClick={() => handleAction('student', row._id, 'approve')}
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      className="flex-1 min-w-[120px]"
+                      disabled={actioning === `student-${row._id}`}
+                      onClick={() => handleAction('student', row._id, 'reject')}
+                    >
+                      Reject
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </Card>
 
@@ -159,7 +199,45 @@ const ApprovalsPage = () => {
             {statusChip('Clear')}
           </div>
         ) : (
-          <Table columns={wardenColumns} rows={pending.wardens} emptyLabel="No pending wardens" />
+          <>
+            <div className="hidden sm:block">
+              <Table columns={wardenColumns} rows={pending.wardens} emptyLabel="No pending wardens" />
+            </div>
+            <div className="grid gap-3 sm:hidden">
+              {pending.wardens.map((row) => (
+                <div key={row._id} className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-base font-semibold text-gray-900 dark:text-slate-100">{row.name}</p>
+                      <p className="text-sm text-gray-600 dark:text-slate-300">{row.email}</p>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">{row.phone} • {row.office || 'Office tbd'}</p>
+                      <p className="mt-1 text-xs text-gray-500 dark:text-slate-400">Requested {new Date(row.createdAt).toLocaleString()}</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Button
+                      size="sm"
+                      variant="primary"
+                      className="flex-1 min-w-[120px]"
+                      disabled={actioning === `warden-${row._id}`}
+                      onClick={() => handleAction('warden', row._id, 'approve')}
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      className="flex-1 min-w-[120px]"
+                      disabled={actioning === `warden-${row._id}`}
+                      onClick={() => handleAction('warden', row._id, 'reject')}
+                    >
+                      Reject
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </Card>
     </div>
