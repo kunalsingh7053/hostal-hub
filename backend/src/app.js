@@ -10,6 +10,7 @@ const app = express();
 app.use(
   cors({
     origin: "https://hoostelhub.netlify.app",
+    origin: "https://hostal-hub.vercel.app",
     credentials: true
   })
 );
